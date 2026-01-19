@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Masjid Mekarindah</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; }
+        .container { max-width: 500px; background: white; padding: 25px; margin: auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2, h3 { color: #004d40; text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #444; }
+        input, textarea, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #004d40; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; }
+        button:hover { background: #00695c; }
+        #status { margin-top: 15px; text-align: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Admin Panel Masjid</h2>
+    <hr>
+    <div class="form-group">
+        <label>Petugas Jumat</label>
+        <input type="text" id="petugas">
+    </div>
+    <div class="form-group">
+        <label>Saldo Kas Masjid</label>
+        <input type="text" id="saldo">
+    </div>
+    <div class="form-group">
+        <label>Running Text</label>
+        <textarea id="marquee" rows="2"></textarea>
+    </div>
+
+    <hr>
+    <h3>Pengumuman Kegiatan Tengah</h3>
+    <div class="form-group">
+        <label>Tampilkan Pengumuman?</label>
+        <select id="eventActive">
+            <option value="true">Ya, Tampilkan</option>
+            <option value="false">Sembunyikan</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Nama Kegiatan</label>
+        <input type="text" id="eventTitle">
+    </div>
+    <div class="form-group">
+        <label>Tanggal / Waktu</label>
+        <input type="text" id="eventDate">
+    </div>
+    <div class="form-group">
+        <label>Nama File Foto (Contoh: bukber.jpg)</label>
+        <input type="text" id="eventImg">
+    </div>
+    <div class="form-group">
+        <label>Keterangan Singkat</label>
+        <textarea id="eventDesc" rows="2"></textarea>
+    </div>
+
+    <button onclick="updateData()">Simpan Perubahan</button>
+    <div id="status"></div>
+</div>
+
+<script>
+    const BIN_ID = '696b9011ae596e708fe2b6e5'; 
+    const KEY = '$2a$10$wOmw1bmVgdzweWhDNL7ujO8t2zGoWPiQzeLE/IeIhZg//vicMOJnq';
+    const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+    async function loadData() {
+        try {
+            const res = await fetch(`${URL}/latest`, { headers: {'X-Master-Key': KEY} });
+            const data = (await res.json()).record;
+            document.getElementById('petugas').value = data.petugas;
+            document.getElementById('saldo').value = data.saldo;
+            document.getElementById('marquee').value = data.marquee;
+            document.getElementById('eventActive').value = data.eventActive;
+            document.getElementById('eventTitle').value = data.eventTitle;
+            document.getElementById('eventDate').value = data.eventDate;
+            document.getElementById('eventImg').value = data.eventImg;
+            document.getElementById('eventDesc').value = data.eventDesc;
+        } catch (e) { alert("Gagal ambil data!"); }
+    }
+
+    async function updateData() {
+        const status = document.getElementById('status');
+        status.innerText = "Menyimpan...";
+        
+        const data = {
+            petugas: document.getElementById('petugas').value,
+            saldo: document.getElementById('saldo').value,
+            marquee: document.getElementById('marquee').value,
+            eventActive: document.getElementById('eventActive').value,
+            eventTitle: document.getElementById('eventTitle').value,
+            eventDate: document.getElementById('eventDate').value,
+            eventImg: document.getElementById('eventImg').value,
+            eventDesc: document.getElementById('eventDesc').value
+        };
+
+        try {
+            const res = await fetch(URL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': KEY },
+                body: JSON.stringify(data)
+            });
+            if(res.ok) status.innerText = "✅ Berhasil Disimpan!";
+        } catch (e) { status.innerText = "❌ Gagal Simpan!"; }
+    }
+
+    loadData();
+</script>
+</body>
+</html>
