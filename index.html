@@ -28,81 +28,74 @@
             background-color: #111;
         }
 
-        /* GRID LAYOUT UTAMA (Anti-Terpotong di Desktop/TV) */
+        /* GRID LAYOUT UTAMA */
         .main-wrapper {
             display: grid;
-            /* Baris 1: Header, Baris 2: Event (Flexible), Baris 3: Jadwal (Locked) */
-            grid-template-rows: auto minmax(0, 1fr) 170px; 
-            height: 100vh; padding: 20px; padding-bottom: 95px; position: relative; z-index: 1; gap: 10px;
+            /* Baris 1: Header, Baris 2: Event (Flexible), Baris 3: Jadwal (Locked 130px) */
+            grid-template-rows: auto minmax(0, 1fr) 130px; 
+            height: 100vh; padding: 15px 25px; padding-bottom: 75px; position: relative; z-index: 1; gap: 10px;
         }
 
-        /* --- 1. ATAS (HEADER) --- */
+        /* --- 1. ATAS (HEADER - UKURAN KECIL & SEIMBANG) --- */
         .top-section { display: flex; justify-content: space-between; align-items: flex-start; }
         .masjid-info {
-            background: var(--primary); padding: 12px 35px; border-radius: 10px;
+            background: var(--primary); padding: 8px 25px; border-radius: 8px;
             backdrop-filter: var(--blur); border: 1px solid rgba(255,255,255,0.2);
         }
-        .masjid-info h1 { font-size: 2.5rem; text-transform: uppercase; text-shadow: 2px 2px 4px black; }
+        .masjid-info h1 { font-size: 1.8rem; text-transform: uppercase; text-shadow: 2px 2px 4px black; }
 
         .admin-box {
-            background: var(--glass); backdrop-filter: var(--blur); padding: 10px 20px;
-            border-radius: 10px; border-left: 5px solid var(--accent); margin-top: 8px; width: fit-content;
+            background: var(--glass); backdrop-filter: var(--blur); padding: 6px 15px;
+            border-radius: 8px; border-left: 4px solid var(--accent); margin-top: 5px; width: fit-content;
         }
-        .admin-box span { font-size: 0.9rem; color: var(--accent); }
+        .admin-box span { font-size: 0.7rem; color: var(--accent); text-transform: uppercase; }
+        .admin-box b { font-size: 1.1rem; }
 
-        .clock-section { background: var(--glass); padding: 15px 30px; border-radius: 10px; backdrop-filter: var(--blur); text-align: right; }
-        #jam { font-size: 3rem; font-weight: bold; color: var(--accent); line-height: 1; }
-        .date { font-size: 1.3rem; margin-top: 5px; }
+        .clock-section { background: var(--glass); padding: 8px 20px; border-radius: 8px; backdrop-filter: var(--blur); text-align: right; }
+        #jam { font-size: 2rem; font-weight: bold; color: var(--accent); line-height: 1; }
+        .date { font-size: 1rem; margin-top: 3px; }
         
         #next-sholat-box {
-            background: var(--danger); padding: 10px 20px; border-radius: 8px;
-            font-size: 1.2rem; font-weight: bold; margin-top: 10px; display: none;
+            background: var(--danger); padding: 4px 12px; border-radius: 6px;
+            font-size: 0.9rem; font-weight: bold; margin-top: 5px; display: none;
             animation: pulse 1s infinite;
         }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
 
-        /* --- 2. TENGAH: EVENT SLIDER (FRAMELESS) --- */
+        /* --- 2. TENGAH: EVENT SLIDER (TYPOGRAPHY ADJUSTED) --- */
         .middle-section { display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        
-        .event-slide {
-            display: flex; align-items: center; gap: 40px; width: 90%;
-            animation: fadeSlide 1s ease-in-out forwards;
-        }
-
-        @keyframes fadeSlide {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
+        .event-slide { display: flex; align-items: center; gap: 35px; width: 85%; animation: fadeSlide 1s ease-in-out forwards; }
+        @keyframes fadeSlide { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
 
         .event-img { 
-            width: 300px; height: 300px; object-fit: cover; border-radius: 20px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
-            border: 4px solid rgba(255,255,255,0.2);
+            width: 300px; height: 300px; object-fit: cover; border-radius: 15px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8); border: 3px solid rgba(255,255,255,0.2);
         }
 
-        .event-text { flex: 1; text-shadow: 2px 2px 10px black; }
-        .event-text h4 { color: var(--accent); font-size: 1.6rem; text-transform: uppercase; margin-bottom: 8px; }
-        .event-text h2 { font-size: 3.2rem; line-height: 1.1; margin-bottom: 12px; text-transform: uppercase; color: #fff; }
-        .event-text p { font-size: 1.5rem; color: #eee; line-height: 1.3; }
+        .event-text { flex: 1; text-shadow: 2px 2px 8px black; }
+        .event-text h4 { color: var(--accent); font-size: 1.1rem; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px; }
+        
+        /* Judul Event: Diperkecil agar seimbang dengan deskripsi */
+        .event-text h2 { font-size: 1.9rem; line-height: 1.2; margin-bottom: 8px; text-transform: uppercase; color: #fff; font-weight: 700; }
+        
+        /* Deskripsi Event */
+        .event-text p { font-size: 1.4rem; color: #eee; line-height: 1.4; font-weight: 400; }
 
-        /* --- 3. BAWAH (JADWAL SHOLAT - KUNCI POSISI) --- */
-        .sholat-container { 
-            display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; 
-            align-self: end;
-        }
+        /* --- 3. BAWAH (JADWAL SHOLAT - KECIL & RAPI) --- */
+        .sholat-container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; align-self: end; }
         .sholat-box {
-            background: var(--primary); backdrop-filter: var(--blur); padding: 20px 5px;
-            text-align: center; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2);
+            background: var(--primary); backdrop-filter: var(--blur); padding: 12px 5px;
+            text-align: center; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
         }
         .sholat-box.active { background: var(--danger) !important; transform: scale(1.03); border: 2px solid white; }
-        .sholat-box h3 { font-size: 1.4rem; color: var(--accent); text-transform: uppercase; }
-        .sholat-box p { font-size: 2.5rem; font-weight: bold; }
+        .sholat-box h3 { font-size: 1rem; color: var(--accent); text-transform: uppercase; margin-bottom: 2px; }
+        .sholat-box p { font-size: 2rem; font-weight: bold; }
 
+        /* FOOTER (RUNNING TEXT) */
         footer {
             position: fixed; bottom: 0; left: 0; width: 100%; background: #000;
-            padding: 15px 0; border-top: 3px solid var(--accent); z-index: 100;
+            padding: 10px 0; border-top: 2px solid var(--accent); z-index: 100;
         }
-        marquee { font-size: 2.2rem; color: white; }
+        marquee { font-size: 1.8rem; color: white; font-weight: 400; }
     </style>
 </head>
 <body>
@@ -110,7 +103,6 @@
     <div id="bg-slider"></div>
 
     <div class="main-wrapper">
-        <!-- TOP -->
         <div class="top-section">
             <div class="left-side">
                 <div class="masjid-info"><h1>Masjid Mekarindah</h1></div>
@@ -127,10 +119,8 @@
             </div>
         </div>
 
-        <!-- MIDDLE -->
         <div class="middle-section" id="event-slider-container"></div>
 
-        <!-- BOTTOM -->
         <div class="sholat-container">
             <div id="box-Subuh" class="sholat-box"><h3>Subuh</h3><p id="Subuh">--:--</p></div>
             <div id="box-Dzuhur" class="sholat-box"><h3>Dzuhur</h3><p id="Dzuhur">--:--</p></div>
@@ -146,19 +136,18 @@
         const BIN_ID = '696e464643b1c97be93ae92e'; 
         const KEY = '$2a$10$wOmw1bmVgdzweWhDNL7ujO8t2zGoWPiQzeLE/IeIhZg//vicMOJnq';
         
-        // --- 10 LINK BACKGROUND HARDCODED ---
         const images = [
-            'https://i.ibb.co.com/ycM74Jcc/bg4.jpg',
             'https://i.ibb.co.com/WNVK8G18/IMG-20260105-WA0001.jpg',
             'https://i.ibb.co.com/SwCDzB9K/IMG-20260105-WA0015.jpg',
             'https://i.ibb.co.com/G3Vqdp1t/bg1.jpg',
             'https://i.ibb.co.com/LdFT2Fh2/IMG-20260105-WA0019.jpg',
             'https://i.ibb.co.com/4q1GRSx/bg2.jpg',
             'https://i.ibb.co.com/whqLVsH8/bg3.jpg',
+            'https://i.ibb.co.com/ycM74Jcc/bg4.jpg',
             'https://i.ibb.co/xxx/bg8.jpg',
             'https://i.ibb.co/xxx/bg9.jpg',
             'https://i.ibb.co/xxx/bg10.jpg'
-        ]; 
+        ];  
 
         let bgIndex = 0;
         let jadwalSkg = {};
@@ -202,7 +191,7 @@
             const ev = activeEvents[eventIndex];
             container.innerHTML = `
                 <div class="event-slide">
-                    <img src="${ev.img}" class="event-img" onerror="this.src='https://via.placeholder.com/300?text=Cek+Link+Gambar'">
+                    <img src="${ev.img}" class="event-img" onerror="this.src='https://via.placeholder.com/300?text=Gambar+Event'">
                     <div class="event-text">
                         <h4>${ev.date}</h4>
                         <h2>${ev.title}</h2>
@@ -218,12 +207,16 @@
                 const data = (await res.json()).record;
                 document.getElementById('dispSaldo').innerText = data.saldo;
                 document.getElementById('dispPetugas').innerText = data.petugas;
+                
                 activeEvents = data.events.filter(e => e.active === "true" || e.active === true);
                 eventIndex = 0; rotateEvent();
-                const resH = await fetch('https://api.hadith.gading.dev/books/bukhari?range=1-50');
+
+                const resH = await fetch('https://api.hadith.gading.dev/books/bukhari?range=1-100');
                 const dataH = await resH.json();
-                const hT = dataH.data.hadiths[Math.floor(Math.random() * 50)].id.substring(0, 200);
-                document.getElementById('running-text').innerText = `Selamat Datang - ${data.marquee} | Hadits: ${hT}...`;
+                const randomH = dataH.data.hadiths[Math.floor(Math.random() * 100)];
+                
+                const teksFull = `SABDA RASULULLAH SAW: "${randomH.id}" (HR. BUKHARI No. ${randomH.number})`;
+                document.getElementById('running-text').innerText = `SELAMAT DATANG DI MASJID MEKARINDAH - ${data.marquee.toUpperCase()} | ${teksFull}`;
             } catch (e) { console.log("Sync Error", e); }
         }
 
