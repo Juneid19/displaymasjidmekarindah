@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Masjid Mekarindah</title>
+    <!-- IMPORT GOOGLE FONTS: Amiri untuk Arab, Lora untuk Latin Serif -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+        :root { 
+            --primary: rgba(0, 77, 64, 0.9); 
+            --accent: #ffc107;               
+            --glass: rgba(0, 0, 0, 0.75);
+            --blur: blur(15px);
+            --danger: rgba(183, 28, 28, 0.95);
+            --font-latin: 'Poppins', Orbitron;
+            --font-arabic: 'Amiri', serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-latin); }
+
+        body {
+            overflow: hidden; background-color: #111; color: white;
+            height: 100vh; width: 100vw;
+        }
+
+        /* Background Slider */
+        #bg-slider {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2; background-size: cover; background-position: center;
+            transition: background-image 2s ease-in-out; background-color: #111;
+        }
+
+        .main-wrapper {
+            display: grid;
+            grid-template-rows: auto minmax(0, 1fr) 130px; 
+            height: 100vh; padding: 15px 25px; padding-bottom: 75px; position: relative; z-index: 1; gap: 10px;
+        }
+
+        /* --- 1. HEADER (CENTERED) --- */
+        .top-section { 
+            display: grid; 
+            grid-template-columns: 1fr auto 1fr; 
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .left-side { display: flex; flex-direction: column; gap: 5px; }
+        
+        .masjid-info {
+            background: var(--primary); padding: 8px 35px; border-radius: 0 0 12px 12px;
+            backdrop-filter: var(--blur); border: 1px solid rgba(255,255,255,0.2);
+            text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .masjid-info h1 { font-size: 2.2rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
+
+        .admin-box {
+            background: var(--glass); backdrop-filter: var(--blur); padding: 5px 15px;
+            border-radius: 8px; border-left: 4px solid var(--accent); width: fit-content;
+        }
+        .admin-box span { font-size: 0.7rem; color: var(--accent); text-transform: uppercase; font-family: var(--font-latin); }
+        .admin-box b { font-size: 1.1rem; }
+
+        .right-side { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+        
+        .clock-section { 
+            background: var(--glass); padding: 8px 20px; border-radius: 10px; 
+            backdrop-filter: var(--blur); text-align: right; width: fit-content;
+        }
+        #jam { font-size: 2.2rem; font-weight: bold; color: var(--accent); line-height: 1; display: block; }
+        .date-text { font-size: 0.9rem; margin-top: 4px; display: block; }
+
+        #next-sholat-box {
+            background: var(--danger); padding: 6px 15px; border-radius: 8px;
+            font-size: 0.9rem; font-weight: bold; width: fit-content;
+            animation: pulse 1s infinite; display: none;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+        /* --- 2. TENGAH (EVENT) --- */
+        .middle-section { display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .event-slide { display: flex; align-items: center; gap: 40px; width: 85%; animation: fadeSlide 0.8s ease-out; }
+        .event-slide-no-img { text-align: center; width: 75%; animation: fadeSlide 0.8s ease-out; }
+        @keyframes fadeSlide { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .event-img { width: 320px; height: 320px; object-fit: cover; border-radius: 15px; border: 3px solid rgba(255,255,255,0.2); }
+        .youtube-container { width: 650px; height: 360px; border-radius: 15px; overflow: hidden; border: 4px solid var(--accent); }
+        
+        .event-text { flex: 1; text-shadow: 2px 2px 8px black; }
+        .event-text h2 { font-size: 1.4rem; margin-bottom: 12px; color: #fff; font-weight: 700; text-transform: uppercase; }
+        
+        /* APLIKASI FONT AMIRI UNTUK DESKRIPSI (Karena sering ada Arab) */
+        .event-text p { 
+            font-size: 1.2rem; color: #eee; line-height: 1.4; 
+            white-space: pre-line;
+            font-family: var(--font-arabic), var(--font-latin); /* Arab didahulukan */
+        }
+
+        /* --- 3. JADWAL (6 BOX SLIM) --- */
+        .sholat-container { display: flex; justify-content: center; gap: 30px; align-self: end; }
+        .sholat-box {
+            background: var(--primary); backdrop-filter: var(--blur); 
+            padding: 12px 0; width: 130px; text-align: center; border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .sholat-box.active { background: var(--danger) !important; transform: scale(1.1); border: 2px solid white; }
+        .sholat-box h3 { font-size: 0.9rem; color: var(--accent); text-transform: uppercase; margin-bottom: 2px; }
+        .sholat-box p { font-size: 2rem; font-weight: bold; }
+
+        /* FOOTER RUNNING TEXT - AMIRI EDITION */
+        footer { 
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #000; 
+            padding: 10px 0; border-top: 2px solid var(--accent); 
+        }
+        marquee { 
+            font-size: 1.2rem; color: white; font-weight: 400; 
+            font-family: var(--font-arabic), var(--font-latin); /* Arab didahulukan */
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slider"></div>
+    <div class="main-wrapper">
+        <!-- HEADER -->
+        <header class="top-section">
+            <div class="left-side">
+                <div class="admin-box"><span>Petugas Jumat</span><br><b id="dispPetugas">-</b></div>
+                <div class="admin-box" style="margin-top:5px;"><span>Saldo Kas</span><br><b id="dispSaldo">Rp 0</b></div>
+            </div>
+            <div class="masjid-info"><h1>Masjid Mekarindah</h1></div>
+            <div class="right-side">
+                <div class="clock-section">
+                    <span id="jam">00:00:00</span>
+                    <span class="date-text" id="tgl-masehi">---</span>
+                    <span class="date-text" id="tgl-hijri" style="color:var(--accent)">---</span>
+                </div>
+                <div id="next-sholat-box">Memuat...</div>
+            </div>
+        </header>
+
+        <!-- MIDDLE -->
+        <main class="middle-section" id="event-slider-container"></main>
+
+        <!-- BOTTOM -->
+        <div class="sholat-container">
+            <div id="box-Subuh" class="sholat-box"><h3>Subuh</h3><p id="Subuh">--:--</p></div>
+            <div id="box-Syuruq" class="sholat-box"><h3>Syuruq</h3><p id="Syuruq">--:--</p></div>
+            <div id="box-Dzuhur" class="sholat-box"><h3>Dzuhur</h3><p id="Dzuhur">--:--</p></div>
+            <div id="box-Ashar" class="sholat-box"><h3>Ashar</h3><p id="Ashar">--:--</p></div>
+            <div id="box-Maghrib" class="sholat-box"><h3>Maghrib</h3><p id="Maghrib">--:--</p></div>
+            <div id="box-Isya" class="sholat-box"><h3>Isya</h3><p id="Isya">--:--</p></div>
+        </div>
+    </div>
+    <footer><marquee scrollamount="4" id="running-text">Memuat informasi masjid...</marquee></footer>
+
+     <script>
+        const BIN_ID = '696e464643b1c97be93ae92e'; 
+        const KEY = '$2a$10$wOmw1bmVgdzweWhDNL7ujO8t2zGoWPiQzeLE/IeIhZg//vicMOJnq';
+        
+        // --- 10 LINK BACKGROUND (ImgBB Direct Link) ---
+        const images = [
+            'https://i.ibb.co.com/1f4cSHnR/mosque-8868893-1920.jpg',
+            'https://i.ibb.co.com/5WhGF0Sn/mosque-3905675-1920.jpg',
+            'https://i.ibb.co.com/vCDfRRPb/sheikh-zayed-mosque-1017246-1920.jpg',
+            'https://i.ibb.co.com/r2m0zQc6/istanbul-1139844-1920.jpg',
+            'https://i.ibb.co.com/WWq2FBBq/faisal-mosque-2821020-1920.jpg',
+            'https://i.ibb.co.com/BVp1YPHB/the-hassan-ii-mosque-4703812-1920.jpg',
+            'https://i.ibb.co.com/ycM74Jcc/bg4.jpg',
+            'https://i.ibb.co.com/9kCWKGwb/view-7670868-1920.jpg',
+            'https://i.ibb.co.com/zWWf6zQ4/mosque-4849160-1920.jpg',
+            'https://i.ibb.co.com/Df00Bv5M/mosque-4549602-1920.jpg'
+        ];
+
+        let bgIndex = 0, jadwalSkg = {}, activeEvents = [], eventIndex = 0, currentRenderedId = "";
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('jam').innerText = now.toLocaleTimeString('id-ID', { hour12: false });
+            document.getElementById('tgl-masehi').innerText = now.toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+            if (Object.keys(jadwalSkg).length > 0) processTimeLogic();
+        }
+
+        function processTimeLogic() {
+            const now = new Date();
+            const cur = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+            let next = null; let min = Infinity; let active = null;
+            ['Subuh', 'Syuruq', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'].forEach(n => {
+                const [h, m] = jadwalSkg[n].split(':').map(Number);
+                const s = h * 3600 + m * 60;
+                const box = document.getElementById(`box-${n}`);
+                box.classList.remove('active');
+                if (s - cur > 0 && s - cur < min) { min = s - cur; next = { n, s: min }; }
+                if (cur >= s && cur < s + 1200) active = n;
+            });
+
+            if (active) document.getElementById(`box-${active}`).classList.add('active');
+            const cb = document.getElementById('next-sholat-box');
+            if (next) {
+                cb.style.display = 'block';
+                const h = Math.floor(next.s / 3600); const m = Math.floor((next.s % 3600) / 60); const sc = next.s % 60;
+                cb.innerText = `Menuju ${next.n}: ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${sc.toString().padStart(2,'0')}`;
+            } else { cb.innerText = `Menuju Subuh Esok`; }
+        }
+
+        function getYoutubeId(url) {
+            if (!url) return null;
+            const regExp = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|user\/\w\/|live\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[1].length === 11) ? match[1] : null;
+        }
+
+        function rotateEvent() {
+            const container = document.getElementById('event-slider-container');
+            if (activeEvents.length === 0) { container.innerHTML = ''; currentRenderedId = ""; return; }
+            const ev = activeEvents[eventIndex];
+            const ytId = getYoutubeId(ev.img);
+            const contentId = ytId ? ytId : ev.title + ev.date;
+
+            if (contentId === currentRenderedId) { eventIndex = (eventIndex + 1) % activeEvents.length; return; }
+
+            if (ytId) {
+                container.innerHTML = `<div class="event-slide"><div class="youtube-container"><iframe width="100%" height="100%" src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div><div class="event-text"><h4 style="color:red; font-size:1.5rem">● LIVE KAJIAN</h4><h2>${ev.title}</h2><p>${ev.desc}</p></div></div>`;
+            } else if (ev.img && ev.img.trim() !== "") {
+                container.innerHTML = `<div class="event-slide"><img src="${ev.img}" class="event-img"><div class="event-text"><h4>${ev.date}</h4><h2>${ev.title}</h2><p>${ev.desc}</p></div></div>`;
+            } else {
+                container.innerHTML = `<div class="event-slide-no-img"><div class="event-text"><h4>${ev.date}</h4><h2>${ev.title}</h2><p>${ev.desc}</p></div></div>`;
+            }
+            currentRenderedId = contentId;
+            eventIndex = (eventIndex + 1) % activeEvents.length;
+        }
+
+        async function syncData() {
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: {'X-Master-Key': KEY} });
+                const data = (await res.json()).record;
+                document.getElementById('dispSaldo').innerText = data.saldo;
+                document.getElementById('dispPetugas').innerText = data.petugas;
+                let allActive = data.events.filter(e => e.active === "true" || e.active === true);
+                const slot10 = data.events[9];
+                const ytId = getYoutubeId(slot10.img);
+                if (slot10.active === "true" && ytId) activeEvents = [slot10];
+                else activeEvents = allActive;
+                if (activeEvents.length > 0) rotateEvent();
+                const resH = await fetch('https://api.hadith.gading.dev/books/bukhari?range=1-100');
+                const dataH = await resH.json();
+                const rh = dataH.data.hadiths[Math.floor(Math.random() * 100)];
+                document.getElementById('running-text').innerText = `SELAMAT DATANG DI MASJID MEKARINDAH: ${data.marquee.toUpperCase()} | SABDA NABI: "${rh.id}" (HR. BUKHARI No. ${rh.number})`;
+            } catch (e) { console.log(e); }
+        }
+
+        async function getJadwal() {
+            try {
+                const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Cikarang&country=Indonesia&method=11');
+                const d = await res.json();
+                const t = d.data.timings;
+                jadwalSkg = { Subuh: t.Fajr, Syuruq: t.Sunrise, Dzuhur: t.Dhuhr, Ashar: t.Asr, Maghrib: t.Maghrib, Isya: t.Isha };
+                for (let n in jadwalSkg) document.getElementById(n).innerText = jadwalSkg[n];
+                document.getElementById('tgl-hijri').innerText = `${d.data.date.hijri.day} ${d.data.date.hijri.month.en} ${d.data.date.hijri.year} H`;
+            } catch (e) { console.log(e); }
+        }
+
+        setInterval(updateClock, 1000);
+        setInterval(() => { bgIndex = (bgIndex + 1) % images.length; document.getElementById('bg-slider').style.backgroundImage = `url('${images[bgIndex]}')`; }, 300000);
+        setInterval(rotateEvent, 15000);
+        setInterval(syncData, 1800000);
+        updateClock(); getJadwal(); syncData();
+        document.getElementById('bg-slider').style.backgroundImage = `url('${images[0]}')`;
+    </script>
+</body>
+</html>
