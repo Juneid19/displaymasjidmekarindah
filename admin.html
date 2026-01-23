@@ -44,23 +44,22 @@
 <div class="container">
     <h2>Panel Kontrol Display Masjid Mekarindah</h2>
 
-    <!-- INFO GLOBAL -->
-    <h3>1. Informasi Umum Masjid</h3>
-    <div class="global-settings">
-        <div>
-            <label>Petugas Jumat (Khatib/Imam)</label>
-            <input type="text" id="petugas" placeholder="Ust. Ahmad Fauzi, Lc">
-        </div>
-        <div>
-            <label>Saldo Kas Masjid</label>
-            <input type="text" id="saldo" placeholder="Rp 12.500.000">
-        </div>
-        <div style="grid-column: span 1;">
-            <label>Pesan Running Text (Marquee)</label>
-            <textarea id="marquee" placeholder="Mohon luruskan dan rapatkan shaf..."></textarea>
-        </div>
+    <!-- INFO GLOBAL DI ADMIN.HTML -->
+<h3>1. Informasi Umum Masjid</h3>
+<div class="global-settings">
+    <div>
+        <label>Khatib / Imam</label>
+        <input type="text" id="petugas" placeholder="Contoh: Ust. Fauzi / Ust. Salman">
     </div>
-
+    <div>
+        <label>Muadzin</label>
+        <input type="text" id="saldo" placeholder="Contoh: Bang Bilal">
+    </div>
+    <div>
+        <label>Pesan Running Text</label>
+        <textarea id="marquee" placeholder="Mohon luruskan shaf..."></textarea>
+    </div>
+</div>
     <!-- GRID 15 EVENT -->
     <h3>2. Pengumuman Slider (Maksimal 15 Event)</h3>
     <p class="hint">* Slot 1-9: Gambar. Slot 10: YouTube/Video. Slot 11-15: Teks Saja.</p>
